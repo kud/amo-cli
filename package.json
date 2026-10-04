@@ -1,0 +1,69 @@
+{
+  "name": "@kud/amo-cli",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Sync an add-on's listing, icon and screenshots with addons.mozilla.org, and check its review status, from the terminal.",
+  "bin": {
+    "amo": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "build": "tsup",
+    "build:watch": "tsup --watch",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "prepublishOnly": "npm run build"
+  },
+  "homepage": "https://kud.io/projects/amo-cli",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kud/amo-cli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kud/amo-cli/issues"
+  },
+  "author": {
+    "name": "Erwann Mest",
+    "url": "https://kud.io"
+  },
+  "license": "MIT",
+  "keywords": [
+    "amo",
+    "addons.mozilla.org",
+    "firefox",
+    "webextension",
+    "listing",
+    "cli"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@kud/amo": "0.1.1",
+    "citty": "0.2.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@types/node": "26.6.4",
+    "eslint": "10.12.0",
+    "prettier": "3.9.9",
+    "tsup": "8.5.1",
+    "tsx": "4.23.15",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.71.0",
+    "vitest": "5.0.3"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
