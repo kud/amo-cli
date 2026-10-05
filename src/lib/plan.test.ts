@@ -8,8 +8,8 @@ const base = {
   previewPlan: {
     deletes: [7, 8],
     uploads: [
-      { file: "01.png", caption: "First" },
-      { file: "02.png", caption: null },
+      { file: "01.png", caption: "First", position: 0 },
+      { file: "02.png", caption: null, position: 1 },
     ],
   },
 }
@@ -48,8 +48,10 @@ describe("describeRequest", () => {
     }).flatMap(describeRequest)
     expect(lines.join("\n")).toContain("Authorization: JWT <redacted>")
     expect(lines.join("\n")).not.toMatch(/eyJ/)
+    expect(lines).toContain("    multipart: image=01.png position=0")
     expect(lines).toContain(
-      '    multipart: image=01.png caption={"en-US":"First"}',
+      `    body: ${JSON.stringify({ caption: { "en-US": "First" } })}`,
     )
+    expect(lines).toContain("    multipart: image=02.png position=1")
   })
 })

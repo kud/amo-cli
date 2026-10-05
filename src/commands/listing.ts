@@ -55,6 +55,12 @@ const push = defineCommand({
       description: "Send the changes to AMO",
       default: false,
     },
+    force: {
+      type: "boolean",
+      description:
+        "Replace every preview even when they look in sync with the recorded state",
+      default: false,
+    },
   },
   run: guarded(async ({ args }) => {
     const only = parseOnly(args.only)
@@ -63,6 +69,7 @@ const push = defineCommand({
       inputs,
       only,
       apply: args.apply,
+      force: args.force,
       env: process.env,
       log: console.log,
     })

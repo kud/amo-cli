@@ -1,12 +1,23 @@
+import { createHash } from "node:crypto"
 import { readFile, readdir } from "node:fs/promises"
 import { extname, join } from "node:path"
 
-export type Screenshot = { file: string; caption: string | null; path: string }
+export type Screenshot = {
+  file: string
+  caption: string | null
+  path: string
+  sha256: string
+}
 
 const IMAGE_EXTENSIONS = new Set([".png", ".jpg", ".jpeg"])
 
 const isImage = (name: string) =>
   IMAGE_EXTENSIONS.has(extname(name).toLowerCase())
+
+const hashFile = async (path: string) =>
+  createHash("sha256")
+    .update(await readFile(path))
+    .digest("hex")
 
 const readCaption = async (dir: string, file: string) => {
   const stem = file.slice(0, file.length - extname(file).length)
@@ -32,6 +43,7 @@ export const readScreenshots = async (dir: string): Promise<Screenshot[]> => {
       file,
       caption: await readCaption(dir, file),
       path: join(dir, file),
+      sha256: await hashFile(join(dir, file)),
     })),
   )
 }

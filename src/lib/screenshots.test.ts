@@ -31,6 +31,9 @@ describe("readScreenshots", () => {
       { file: "03-extra.jpeg", caption: null },
     ])
     expect(shots[0]?.path).toBe(join(dir, "01-open.png"))
+    expect(shots[0]?.sha256).toBe(
+      "2d711642b726b04401627ca9fbac32f5c8530fb1903cc4db02258717921a4881",
+    )
   })
 
   it("explains an unreadable directory", async () => {

@@ -17,6 +17,7 @@ export type PlannedRequest =
       url: string
       file: string
       caption: string | null
+      position: number
     }
 
 export type PlanArgs = {
@@ -52,13 +53,16 @@ export const planRequests = ({
           url: `${addonUrl(guid)}previews/${id}/`,
           id,
         })),
-        ...previewPlan.uploads.map(({ file, caption }): PlannedRequest => ({
-          kind: "add-preview",
-          method: "POST",
-          url: `${addonUrl(guid)}previews/`,
-          file,
-          caption,
-        })),
+        ...previewPlan.uploads.map(
+          ({ file, caption, position }): PlannedRequest => ({
+            kind: "add-preview",
+            method: "POST",
+            url: `${addonUrl(guid)}previews/`,
+            file,
+            caption,
+            position,
+          }),
+        ),
       ]
     : []
   return [...listing, ...icon, ...previews]
@@ -78,11 +82,13 @@ export const describeRequest = (request: PlannedRequest): string[] => {
     case "add-preview":
       return [
         ...head,
-        `    multipart: image=${request.file}${
-          request.caption
-            ? ` caption=${JSON.stringify({ "en-US": request.caption })}`
-            : ""
-        }`,
+        `    multipart: image=${request.file} position=${request.position}`,
+        ...(request.caption
+          ? [
+              `  then PATCH ${request.url}<new id>/`,
+              `    body: ${JSON.stringify({ caption: { "en-US": request.caption } })}`,
+            ]
+          : []),
       ]
     case "delete-preview":
       return head
